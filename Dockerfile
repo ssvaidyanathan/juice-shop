@@ -13,8 +13,8 @@ RUN echo "APIKEY is $APIKEY"
 COPY . /juice-shop
 WORKDIR /juice-shop
 
-RUN sed -i "s/{APIKEY}/$APIKEY/" frontend/src/environments/environment.prod.ts
-RUN sed -i "s/{API_ENDPOINT}/$API_ENDPOINT/" frontend/src/environments/environment.prod.ts
+RUN sed -i "s|{APIKEY}|$APIKEY|" frontend/src/environments/environment.prod.ts
+RUN sed -i "s|{API_ENDPOINT}|$API_ENDPOINT|" frontend/src/environments/environment.prod.ts
 
 RUN npm i -g npm
 RUN npm i -g typescript ts-node
