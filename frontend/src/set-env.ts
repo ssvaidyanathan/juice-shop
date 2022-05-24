@@ -1,5 +1,5 @@
 import { writeFile } from 'fs';
-import fs from "fs";
+//import fs from "fs";
 // Configure Angular `environment.ts` file path
 const targetPath = './environments/environment.ts';
 // Load node modules
