@@ -10,8 +10,8 @@
 export const environment = {
   production: false,
   //hostServer: 'http://localhost:3000',
-  hostServer: '${process.env.API_ENDPOINT}${process.env.BASEPATH}',
-  apikey: '${process.env.APIKEY}',
+  hostServer: 'example.com',
+  apikey: 'abcd123',
   socketServer: '.'
 }
 

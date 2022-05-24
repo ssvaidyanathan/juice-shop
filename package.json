@@ -48,6 +48,7 @@
     "..."
   ],
   "scripts": {
+    "config": "ts-node set-env.ts",
     "build:frontend": "cd frontend && node ./node_modules/@angular/cli/bin/ng build --aot --configuration production --output-hashing=none --vendor-chunk=true --source-map=false",
     "build:server": "tsc",
     "e2e": "ts-node test/e2eTests.ts",
@@ -229,6 +230,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "cross-spawn": "^7.0.3",
+    "dotenv": "^16.0.1",
     "eslint": "^7.21.0",
     "eslint-config-standard-with-typescript": "^21.0.1",
     "eslint-plugin-import": "^2.22.1",

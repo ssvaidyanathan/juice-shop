@@ -12,6 +12,7 @@ RUN echo "APIKEY is $APIKEY"
 
 COPY . /juice-shop
 WORKDIR /juice-shop
+RUN npm i -g npm
 RUN npm i -g typescript ts-node
 RUN npm install --production --unsafe-perm
 RUN npm dedupe
