@@ -6,7 +6,7 @@
 export const environment = {
   production: true,
   //hostServer: 'http://localhost:3000',
-  hostServer: '{API_ENDPOINT}',
+  hostServer: '{API_ENDPOINT}{BASEPATH}',
   apikey: '{APIKEY}',
   socketServer: '.'
 }
