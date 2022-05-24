@@ -3,12 +3,15 @@ FROM node:16 as installer
 ARG APIKEY
 ARG API_ENDPOINT
 ARG BASEPATH
+ARG RECAPTCHA_KEY
 ENV APIKEY=$APIKEY
 ENV API_ENDPOINT=$API_ENDPOINT
 ENV BASEPATH=$BASEPATH
+ENV RECAPTCHA_KEY=$RECAPTCHA_KEY
 RUN echo "API_ENDPOINT is $API_ENDPOINT"
 RUN echo "BASEPATH is $BASEPATH"
 RUN echo "APIKEY is $APIKEY"
+RUN echo "RECAPTCHA_KEY is $RECAPTCHA_KEY"
 
 COPY . /juice-shop
 WORKDIR /juice-shop
@@ -16,6 +19,7 @@ WORKDIR /juice-shop
 RUN sed -i "s|{APIKEY}|$APIKEY|" frontend/src/environments/environment.prod.ts
 RUN sed -i "s|{API_ENDPOINT}|$API_ENDPOINT|" frontend/src/environments/environment.prod.ts
 RUN sed -i "s|{BASEPATH}|$BASEPATH|" frontend/src/environments/environment.prod.ts
+RUN sed -i "s|{RECAPTCHA_KEY}|$RECAPTCHA_KEY|" frontend/src/index.html
 
 RUN npm i -g npm
 RUN npm i -g typescript ts-node
