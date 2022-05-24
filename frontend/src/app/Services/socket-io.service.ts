@@ -20,10 +20,7 @@ export class SocketIoService {
           path: (window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/') + 'socket.io'
         })
       } else {
-        //this._socket = io(environment.hostServer)
-        this._socket = io(window.location.origin, {
-          path: (window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/') + 'socket.io'
-        })
+        this._socket = io(environment.hostServer)
       }
     })
   }
