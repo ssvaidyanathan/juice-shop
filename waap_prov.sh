@@ -15,6 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: if updating this script, please consider updating the corresponding
+# waap_deprov.sh script as well.
+
 set -e
 
 # options
