@@ -274,11 +274,24 @@ fi
 echo APIKEY is $APIKEY
 
 echo "Step 3: Create gcr image"
-echo "Step 3.1: Build and submit Juice chop image"
+
+echo "Step 3.1 Create reCAPTCHA key" 
+export RECAPTCHA_NAME=$(gcloud recaptcha keys create \
+  --display-name=waap-demo --web \
+  --domains=$IPADDRESS.nip.io \
+  --waf-feature=SESSION_TOKEN \
+  --waf-service=CA \
+  --integration-type=SCORE \
+  --format=json | jq -r .name)
+export RECAPTCHA_KEY=$(basename $RECAPTCHA_NAME)
+
+echo "reCAPTCHA key is $RECAPTCHA_KEY"
+
+echo "Step 3.2: Build and submit Juice shop image"
 
 export IMAGETAG=gcr.io/$PROJECT_ID/owasp-juice-shop
 gcloud builds submit --project=$PROJECT_ID --config=cloudbuild.yaml \
-  --substitutions=_API_ENDPOINT=$API_ENDPOINT,_BASEPATH=$BASEPATH,_APIKEY=$APIKEY,_IMAGETAG=$IMAGETAG .
+  --substitutions=_API_ENDPOINT=$API_ENDPOINT,_BASEPATH=$BASEPATH,_APIKEY=$APIKEY,_IMAGETAG=$IMAGETAG,_RECAPTCHA_KEY=$RECAPTCHA_KEY .
 
 echo "Step 4: Create Juice shop MIG"
 #create image template
@@ -438,7 +451,7 @@ gcloud compute --project="$PROJECT_ID" security-policies rules create 7001 --act
 
 gcloud compute --project="$PROJECT_ID" security-policies rules create 9000 --action=deny-403 --security-policy=waap-demo-juice-shop --description="block sql injection" --expression=evaluatePreconfiguredExpr\(\'sqli-stable\',\ \[\'owasp-crs-v030001-id942251-sqli\',\ \'owasp-crs-v030001-id942420-sqli\',\ \'owasp-crs-v030001-id942431-sqli\',\ \'owasp-crs-v030001-id942460-sqli\',\ \'owasp-crs-v030001-id942421-sqli\',\ \'owasp-crs-v030001-id942432-sqli\'\]\)
 
-gcloud compute --project="$PROJECT_ID" security-policies rules create 9997 --action=deny-403 --security-policy=waap-demo-juice-shop --description="Deny all requests below 0.8 reCAPTCHA score" --expression=recaptchaTokenScore\(\)\ \<=\ 0.9
+gcloud compute --project="$PROJECT_ID" security-policies rules create 9997 --action=allow --security-policy=waap-demo-juice-shop --description="Deny all requests below 0.8 reCAPTCHA score" --expression=recaptchaTokenScore\(\)\ \<=\ 0.9
 
 gcloud compute --project="$PROJECT_ID" security-policies rules create 2147483646 --action=allow --security-policy=waap-demo-juice-shop --description="Default rule, higher priority overrides it" --src-ip-ranges=\*
 
