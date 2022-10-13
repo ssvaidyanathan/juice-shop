@@ -24,7 +24,8 @@ module.exports.getPaymentMethods = function getPaymentMethods () {
         UserId: card.UserId,
         id: card.id,
         fullName: card.fullName,
-        cardNum: '',
+        //cardNum: '',
+        cardNum: String(card.cardNum),
         expMonth: card.expMonth,
         expYear: card.expYear
       }
@@ -53,7 +54,7 @@ module.exports.getPaymentMethodById = function getPaymentMethodById () {
       displayableCard.fullName = card.fullName
       displayableCard.expMonth = card.expMonth
       displayableCard.expYear = card.expYear
-
+      displayableCard.cardNum = String(card.cardNum)
       //const cardNumber = String(card.cardNum)
       //displayableCard.cardNum = '*'.repeat(12) + cardNumber.substring(cardNumber.length - 4)
     }
