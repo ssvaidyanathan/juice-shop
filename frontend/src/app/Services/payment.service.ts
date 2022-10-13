@@ -13,17 +13,21 @@ import { catchError, map } from 'rxjs/operators'
 })
 export class PaymentService {
   private readonly hostServer = environment.hostServer
+  private readonly apiServer = environment.apiServer
+  private readonly apikey = environment.apikey
   private readonly host = this.hostServer + '/api/Cards'
 
   constructor (private readonly http: HttpClient) { }
 
   get () {
-    return this.http.get(this.host).pipe(map((response: any) => response.data), catchError((err) => { throw err }))
+    //return this.http.get(this.host).pipe(map((response: any) => response.data), catchError((err) => { throw err }))
+    return this.http.get(`${this.apiServer}/api/Cards?apikey=${this.apikey}`).pipe(map((response: any) => response.data), catchError((err) => { throw err }))
   }
 
   getById (id) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return this.http.get(`${this.host}/${id}`).pipe(map((response: any) => response.data), catchError((err: Error) => { throw err }))
+    //return this.http.get(`${this.host}/${id}`).pipe(map((response: any) => response.data), catchError((err: Error) => { throw err }))
+    return this.http.get(`${this.apiServer}/api/Cards/${id}?apikey=${this.apikey}`).pipe(map((response: any) => response.data), catchError((err: Error) => { throw err }))
   }
 
   save (params) {
