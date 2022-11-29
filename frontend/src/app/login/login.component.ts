@@ -8,6 +8,7 @@ import { WindowRefService } from '../Services/window-ref.service'
 import { Router } from '@angular/router'
 import { Component, NgZone, OnInit } from '@angular/core'
 import { FormControl, Validators } from '@angular/forms'
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { dom, library } from '@fortawesome/fontawesome-svg-core'
 import { UserService } from '../Services/user.service'
 import { faEye, faEyeSlash, faKey } from '@fortawesome/free-solid-svg-icons'
@@ -26,6 +27,7 @@ const oauthProviderUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit {
   public emailControl = new FormControl('', [Validators.required])
   public passwordControl = new FormControl('', [Validators.required])
@@ -36,7 +38,7 @@ export class LoginComponent implements OnInit {
   public clientId = '1005568560502-6hm16lef8oh46hr2d98vf2ohlnj4nfhq.apps.googleusercontent.com'
   public oauthUnavailable: boolean = true
   public redirectUri: string = ''
-  constructor (private readonly configurationService: ConfigurationService, private readonly userService: UserService, private readonly windowRefService: WindowRefService, private readonly cookieService: CookieService, private readonly router: Router, private readonly formSubmitService: FormSubmitService, private readonly basketService: BasketService, private readonly ngZone: NgZone) { }
+  constructor (private readonly configurationService: ConfigurationService, private readonly userService: UserService, private readonly windowRefService: WindowRefService, private readonly cookieService: CookieService, private readonly router: Router, private readonly formSubmitService: FormSubmitService, private readonly basketService: BasketService, private readonly ngZone: NgZone, private recaptchaV3Service: ReCaptchaV3Service) { }
 
   ngOnInit () {
     const email = localStorage.getItem('email')
@@ -64,13 +66,22 @@ export class LoginComponent implements OnInit {
       }
     }, (err) => console.log(err))
 
-    this.formSubmitService.attachEnterKeyHandler('login-form', 'loginButton', () => this.login())
+    this.formSubmitService.attachEnterKeyHandler('login-form', 'loginButton', () => this.executeRecaptchaV3())
   }
 
-  login () {
+  executeRecaptchaV3() {
+    this.recaptchaV3Service.execute('login')
+    .subscribe((recaptchaToken: string) => {
+      console.log(`Token [${recaptchaToken}] generated`);
+      this.login(recaptchaToken);
+    });
+  }
+
+  login (recaptchaToken: string) {
     this.user = {}
     this.user.email = this.emailControl.value
     this.user.password = this.passwordControl.value
+    this.user.token=recaptchaToken;
     this.userService.login(this.user).subscribe((authentication: any) => {
       localStorage.setItem('token', authentication.token)
       const expires = new Date()

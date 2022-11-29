@@ -136,6 +136,17 @@ import { CodeAreaComponent } from './code-area/code-area.component'
 import { NgxTextDiffModule } from 'ngx-text-diff'
 import { CodeFixesComponent } from './code-fixes/code-fixes.component'
 
+import {
+  RecaptchaModule,
+  RECAPTCHA_SETTINGS,
+  RecaptchaSettings,
+  RecaptchaFormsModule,
+  RECAPTCHA_V3_SITE_KEY,
+  RecaptchaV3Module
+} from 'ng-recaptcha';
+
+const RECAPTCHA_V3_JUICESHOP_KEY = '{RECAPTCHA_KEY}';
+
 export function HttpLoaderFactory (http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json')
 }
@@ -254,7 +265,10 @@ export function HttpLoaderFactory (http: HttpClient) {
     MatSlideToggleModule,
     MatChipsModule,
     NgxTextDiffModule,
-    HighlightModule
+    HighlightModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+    RecaptchaV3Module
   ],
   providers: [
     {
@@ -273,6 +287,16 @@ export function HttpLoaderFactory (http: HttpClient) {
           yaml: async () => await import('highlight.js/lib/languages/yaml')
         }
       }
+    },
+    {
+      provide: RECAPTCHA_V3_SITE_KEY,
+      useValue: RECAPTCHA_V3_JUICESHOP_KEY
+    },
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: RECAPTCHA_V3_JUICESHOP_KEY
+      } as RecaptchaSettings
     },
     ProductService,
     ConfigurationService,
