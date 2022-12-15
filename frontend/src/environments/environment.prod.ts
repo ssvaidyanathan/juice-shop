@@ -6,6 +6,6 @@
 export const environment = {
   production: true,
   hostServer: '.',
-  apiServer: 'https://api-eval.ssvaidyanathan.com/owasp',
-  apikey: 'ph9YIyvqIZaG83qZK0r4C96p8xRvd0q6uIduoJuYLA6tqeSc'
+  apiServer: '{API_ENDPOINT}{BASEPATH}',
+  apikey: '{APIKEY}'
 }
