@@ -21,6 +21,8 @@ interface Passwords {
 export class UserService {
   public isLoggedIn = new Subject<any>()
   private readonly hostServer = environment.hostServer
+  private readonly apiServer = environment.apiServer
+  private readonly apikey = environment.apikey
   private readonly host = this.hostServer + '/api/Users'
 
   constructor (private readonly http: HttpClient) { }
@@ -41,9 +43,9 @@ export class UserService {
     )
   }
 
-  login (params: any) {
+  login (params: any) { 
     this.isLoggedIn.next(true)
-    return this.http.post(this.hostServer + '/rest/user/login', params).pipe(map((response: any) => response.authentication), catchError((err) => { throw err }))
+    return this.http.post(this.apiServer + `/rest/user/login?apikey=${this.apikey}`, params).pipe(map((response: any) => response.authentication), catchError((err) => { throw err }))
   }
 
   getLoggedInState () {
