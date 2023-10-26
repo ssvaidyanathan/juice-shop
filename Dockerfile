@@ -1,4 +1,4 @@
-FROM node:16 as installer
+FROM node:18-buster as installer
 
 ARG APIKEY
 ARG API_ENDPOINT
@@ -28,7 +28,7 @@ RUN npm install --production --unsafe-perm
 RUN npm dedupe
 RUN rm -rf frontend/node_modules
 
-FROM node:16-alpine
+FROM node:18-buster
 ARG BUILD_DATE
 ARG VCS_REF
 LABEL maintainer="Bjoern Kimminich <bjoern.kimminich@owasp.org>" \

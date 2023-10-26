@@ -1,4 +1,5 @@
 # App
+.DS_Store
 node_modules/
 juiceshop.sqlite
 order_*.pdf
